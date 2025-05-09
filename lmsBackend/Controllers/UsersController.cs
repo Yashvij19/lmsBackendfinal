@@ -2,6 +2,7 @@
 using lmsBackend.DataAccessLayer;
 using lmsBackend.Dtos.User;
 using lmsBackend.Models;
+using lmsBackend.Repository.UserRepo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,69 +13,34 @@ namespace lmsBackend.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IUser _userService;
 
-        public UsersController(AppDbContext context, IMapper mapper)
+        public UsersController(IUser userService)
         {
-            _context = context;
-            _mapper = mapper;
+            _userService = userService;
         }
 
-        // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            var users = await _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.Lob)
-                .ToListAsync();
-
-            return Ok(_mapper.Map<IEnumerable<UserResponseDto>>(users));
+            var users = await _userService.GetUsersAsync();
+            return Ok(users);
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponseDto>> GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.Lob)
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return _mapper.Map<UserResponseDto>(user);
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null) return NotFound();
+            return Ok(user);
         }
 
-        // POST: api/Users
         [HttpPost]
-        public async Task<ActionResult<UserResponseDto>> CreateUser(CreateUserDto createUserDto)
+        public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {
-            // Check if the LOB exists
-            var lob = await _context.Lobs.FindAsync(createUserDto.LobId);
-            if (lob == null)
-            {
-                return BadRequest("Invalid LOB ID.");
-            }
-
-            var user = _mapper.Map<User>(createUserDto);
-
-            // Convert LOB ID to string for the User entity
-            user.LobId = createUserDto.LobId;
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            // Reload user with related entities
-            user = await _context.Users
-                .Include(u => u.Role)
-                .Include(u => u.Lob)
-                .FirstOrDefaultAsync(u => u.Id == user.Id);
-
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, _mapper.Map<UserResponseDto>(user));
+            var user = await _userService.CreateUserAsync(createUserDto);
+            if (user == null) return BadRequest("Invalid LOB ID.");
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
     }
 }

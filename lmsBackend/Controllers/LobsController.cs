@@ -2,6 +2,7 @@
 using lmsBackend.DataAccessLayer;
 using lmsBackend.Dtos.LobDtos;
 using lmsBackend.Models;
+using lmsBackend.Repository.LobRepo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,46 +13,34 @@ namespace lmsBackend.Controllers
     [Route("api/[controller]")]
     public class LobsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly ILob _lobService;
 
-        public LobsController(AppDbContext context, IMapper mapper)
+        public LobsController(ILob lobService)
         {
-            _context = context;
-            _mapper = mapper;
+            _lobService = lobService;
         }
 
-        // GET: api/Lobs
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LobResponseDto>>> GetLobs()
         {
-            var lobs = await _context.Lobs.ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<LobResponseDto>>(lobs));
+            var lobs = await _lobService.GetLobsAsync();
+            return Ok(lobs);
         }
 
-        // GET: api/Lobs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<LobResponseDto>> GetLob(int id)
         {
-            var lob = await _context.Lobs.FindAsync(id);
-
-            if (lob == null)
-            {
-                return NotFound();
-            }
-
-            return _mapper.Map<LobResponseDto>(lob);
+            var lob = await _lobService.GetLobByIdAsync(id);
+            if (lob == null) return NotFound();
+            return Ok(lob);
         }
 
-        // POST: api/Lobs
         [HttpPost]
         public async Task<ActionResult<LobResponseDto>> CreateLob(CreateLobDto createLobDto)
         {
-            var lob = _mapper.Map<Lob>(createLobDto);
-            _context.Lobs.Add(lob);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetLob), new { id = lob.LobId }, _mapper.Map<LobResponseDto>(lob));
+            var lob = await _lobService.CreateLobAsync(createLobDto);
+            return CreatedAtAction(nameof(GetLob), new { id = lob?.LobId }, lob);
         }
     }
+
 }

@@ -1,6 +1,11 @@
 using System.Text.Json.Serialization;
 using lmsBackend.AutomapperProfile;
 using lmsBackend.DataAccessLayer;
+using lmsBackend.Repository.AdminRepo;
+using lmsBackend.Repository.LobRepo;
+using lmsBackend.Repository.RoleRepo;
+using lmsBackend.Repository.SmeRepo;
+using lmsBackend.Repository.UserRepo;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +19,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(Options => {
     Options.UseSqlServer(connectionString);
 });
+builder.Services.AddScoped<IAdmin, AdminService>();
+builder.Services.AddScoped<ISme, SmeService>();
+builder.Services.AddScoped<ILob, LobService>();
+builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddScoped<IRole, RoleService>();
+
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 

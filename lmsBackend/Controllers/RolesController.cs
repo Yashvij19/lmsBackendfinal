@@ -2,6 +2,7 @@
 using lmsBackend.DataAccessLayer;
 using lmsBackend.Dtos.RoleDtos;
 using lmsBackend.Models;
+using lmsBackend.Repository.RoleRepo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,46 +13,34 @@ namespace lmsBackend.Controllers
     [Route("api/[controller]")]
     public class RolesController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
+        private readonly IRole _roleService;
 
-        public RolesController(AppDbContext context, IMapper mapper)
+        public RolesController(IRole roleService)
         {
-            _context = context;
-            _mapper = mapper;
+            _roleService = roleService;
         }
 
-        // GET: api/Roles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RoleResponseDto>>> GetRoles()
         {
-            var roles = await _context.Roles.ToListAsync();
-            return Ok(_mapper.Map<IEnumerable<RoleResponseDto>>(roles));
+            var roles = await _roleService.GetRolesAsync();
+            return Ok(roles);
         }
 
-        // GET: api/Roles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RoleResponseDto>> GetRole(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
-
-            if (role == null)
-            {
-                return NotFound();
-            }
-
-            return _mapper.Map<RoleResponseDto>(role);
+            var role = await _roleService.GetRoleByIdAsync(id);
+            if (role == null) return NotFound();
+            return Ok(role);
         }
 
-        // POST: api/Roles
         [HttpPost]
         public async Task<ActionResult<RoleResponseDto>> CreateRole(CreateRoleDto createRoleDto)
         {
-            var role = _mapper.Map<Role>(createRoleDto);
-            _context.Roles.Add(role);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetRole), new { id = role.RoleId }, _mapper.Map<RoleResponseDto>(role));
+            var role = await _roleService.CreateRoleAsync(createRoleDto);
+            return CreatedAtAction(nameof(GetRole), new { id = role?.RoleId }, role);
         }
     }
+
 }
