@@ -11,11 +11,11 @@ namespace lmsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RolesController : ControllerBase
+    public class rolesController : ControllerBase
     {
         private readonly IRole _roleService;
 
-        public RolesController(IRole roleService)
+        public rolesController(IRole roleService)
         {
             _roleService = roleService;
         }

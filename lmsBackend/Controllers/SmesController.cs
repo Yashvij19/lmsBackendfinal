@@ -11,11 +11,11 @@ namespace lmsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SmesController : ControllerBase
+    public class smesController : ControllerBase
     {
         private readonly ISme _smeService;
 
-        public SmesController(ISme smeService)
+        public smesController(ISme smeService)
         {
             _smeService = smeService;
         }

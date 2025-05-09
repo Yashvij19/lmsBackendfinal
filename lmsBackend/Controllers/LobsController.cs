@@ -11,11 +11,11 @@ namespace lmsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LobsController : ControllerBase
+    public class lobsController : ControllerBase
     {
         private readonly ILob _lobService;
 
-        public LobsController(ILob lobService)
+        public lobsController(ILob lobService)
         {
             _lobService = lobService;
         }
