@@ -32,10 +32,12 @@ namespace lmsBackend.Repository.SmeRepo
 
         public async Task<SmeResponseDto?> CreateSmeAsync(CreateSmeDto createSmeDto)
         {
-            var admin = await _context.Admins.Include(a => a.User).FirstOrDefaultAsync(a => a.AdminId == createSmeDto.AdminId);
+            var admin = await _context.Admins.Include(a => a.User).FirstOrDefaultAsync(a => a.User.Email == createSmeDto.Email && a.User.Phone == createSmeDto.Phone);
             if (admin == null) return null;
 
             var sme = _mapper.Map<Sme>(createSmeDto);
+            sme.AdminId = admin.AdminId;
+            sme.Password = "evs@123";
             _context.Smes.Add(sme);
 
             string smeIdValue = $"SME{DateTime.Now.ToString("yyyyMMddHHmmss")}";
