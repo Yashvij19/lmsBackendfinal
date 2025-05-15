@@ -36,7 +36,7 @@ namespace lmsBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LobResponseDto>> CreateLob(CreateLobDto createLobDto)
+        public async Task<ActionResult<LobResponseDto>> CreateLob([FromBody]CreateLobDto createLobDto)
         {
             var lob = await _lobService.CreateLobAsync(createLobDto);
             return CreatedAtAction(nameof(GetLob), new { id = lob?.LobId }, lob);
