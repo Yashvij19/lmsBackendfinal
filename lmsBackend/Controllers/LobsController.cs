@@ -36,10 +36,18 @@ namespace lmsBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LobResponseDto>> CreateLob([FromBody]CreateLobDto createLobDto)
+        public async Task<ActionResult<LobResponseDto>> CreateLob([FromBody] CreateLobDto createLobDto)
         {
             var lob = await _lobService.CreateLobAsync(createLobDto);
             return CreatedAtAction(nameof(GetLob), new { id = lob?.LobId }, lob);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<LobResponseDto>> EditLob(int id, [FromBody] LobResponseDto createLobDto)
+        {
+            var lob = await _lobService.UpdateLobAsync(id, createLobDto);
+            if (lob == null) return NotFound();
+            return Ok(lob);
         }
     }
 

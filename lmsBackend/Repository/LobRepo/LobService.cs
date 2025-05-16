@@ -37,5 +37,40 @@ namespace lmsBackend.Repository.LobRepo
             return _mapper.Map<LobResponseDto>(lob);
         }
 
+        public async Task<LobResponseDto?> EditLobAsync(int id, LobResponseDto createLobDto)
+        {
+            var existingLob = await _context.Lobs.FirstOrDefaultAsync(l => l.LobId == id);
+            if (existingLob == null)
+            {
+                throw new InvalidOperationException($"LOB with ID {id} not found.");
+            }
+
+            // Update properties
+            existingLob.LobName = createLobDto.LobName;
+            existingLob.LobDescription = createLobDto.LobDescription;
+            existingLob.Status = createLobDto.Status;
+
+            await _context.SaveChangesAsync(); // Save changes
+
+            return _mapper.Map<LobResponseDto>(existingLob);
+        }
+
+        public async Task<LobResponseDto?> UpdateLobAsync(int id, LobResponseDto updateLobDto)
+        {
+            var existingLob = await _context.Lobs.FindAsync(id);
+            if (existingLob == null)
+            {
+                throw new InvalidOperationException($"LOB with ID {id} not found.");
+            }
+
+            // Update properties
+            existingLob.LobName = updateLobDto.LobName ?? existingLob.LobName;
+            existingLob.LobDescription = updateLobDto.LobDescription ?? existingLob.LobDescription;
+            existingLob.Status = updateLobDto.Status;
+
+            await _context.SaveChangesAsync(); // Save changes
+
+            return _mapper.Map<LobResponseDto>(existingLob);
+        }
     }
 }
