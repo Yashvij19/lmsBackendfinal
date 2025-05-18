@@ -2,13 +2,36 @@ using System.Text.Json.Serialization;
 using lmsBackend.AutomapperProfile;
 using lmsBackend.DataAccessLayer;
 using lmsBackend.Repository.AdminRepo;
+using lmsBackend.Repository.CategoriesRepo;
+using lmsBackend.Repository.CourseRepo;
 using lmsBackend.Repository.LobRepo;
+using lmsBackend.Repository.ModuleRepo;
 using lmsBackend.Repository.RoleRepo;
 using lmsBackend.Repository.SmeRepo;
 using lmsBackend.Repository.UserRepo;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
+
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -24,6 +47,9 @@ builder.Services.AddScoped<ISme, SmeService>();
 builder.Services.AddScoped<ILob, LobService>();
 builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IRole, RoleService>();
+builder.Services.AddScoped<Icategories, CategoriesService>();
+builder.Services.AddScoped<ICourse,CourseService>();
+builder.Services.AddScoped<IModule, ModuleService>();
 
 
 
@@ -57,6 +83,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("devCorsPolicy");
 
+// Enable CORS before routing
+app.UseCors("AllowAll");
+
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
