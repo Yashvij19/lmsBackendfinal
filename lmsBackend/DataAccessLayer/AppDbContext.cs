@@ -14,6 +14,10 @@ namespace lmsBackend.DataAccessLayer
         public DbSet<Sme> Smes { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Lob> Lobs { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<Courses> Courses { get; set; }
+        public DbSet<Module> Modules { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
