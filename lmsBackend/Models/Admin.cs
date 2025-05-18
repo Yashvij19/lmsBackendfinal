@@ -13,6 +13,8 @@ namespace lmsBackend.Models
 
         public string SmeId { get; set; } = string.Empty;
 
+        public string TaId { get; set; } = string.Empty;
+
         [Required]
         public bool Status { get; set; } = true;
 

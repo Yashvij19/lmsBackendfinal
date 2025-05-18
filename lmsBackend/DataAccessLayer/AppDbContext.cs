@@ -18,6 +18,8 @@ namespace lmsBackend.DataAccessLayer
         public DbSet<Courses> Courses { get; set; }
         public DbSet<Module> Modules { get; set; }
 
+        public DbSet<Ta> Tas { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,7 +29,8 @@ namespace lmsBackend.DataAccessLayer
             modelBuilder.Entity<Role>().HasData(
                 new Role { RoleId = 1, RoleName = "User" },
                 new Role { RoleId = 2, RoleName = "Admin" },
-                new Role { RoleId = 3, RoleName = "SME" }
+                new Role { RoleId = 3, RoleName = "SME" },
+                new Role { RoleId = 4, RoleName = "TA"}
             );
 
             // User and Lob relationship
@@ -55,6 +58,13 @@ namespace lmsBackend.DataAccessLayer
                 .WithMany()
                 .HasForeignKey(s => s.AdminId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            //TA
+            modelBuilder.Entity<Ta>()
+               .HasOne(t => t.Admin)
+               .WithMany()
+               .HasForeignKey(t => t.AdminId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

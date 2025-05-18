@@ -87,6 +87,8 @@ namespace lmsBackend.Models
         [Required]
         public bool Status { get; set; } = true;
 
+        public bool IsSuperAdmin { get; set; } = false;
+
         [Required]
         [StringLength(200)]
         public string JoinerStatus { get; set; } = string.Empty;
