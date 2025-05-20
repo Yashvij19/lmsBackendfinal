@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lmsBackend.Repository.SmeRepo
 {
-    public class SmeService:ISme
+    public class SmeService : ISme
     {
-        
+
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
 
@@ -51,6 +51,16 @@ namespace lmsBackend.Repository.SmeRepo
 
             sme = await _context.Smes.Include(s => s.Admin).FirstOrDefaultAsync(s => s.SmeId == sme.SmeId);
             return sme == null ? null : _mapper.Map<SmeResponseDto>(sme);
+        }
+
+        public async Task<SmeResponseDto> updateSme(int id)
+        {
+            var sme = await _context.Smes.Include(s => s.Admin).FirstOrDefaultAsync(s => s.SmeId == id);
+            if (sme == null) throw new Exception("SME not found");
+            sme.Status = !sme.Status;
+            _context.Entry(sme).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<SmeResponseDto>(sme);
         }
     }
 }

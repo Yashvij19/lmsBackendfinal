@@ -7,5 +7,6 @@ namespace lmsBackend.Repository.SmeRepo
         Task<IEnumerable<SmeResponseDto>> GetSmesAsync();
         Task<SmeResponseDto?> GetSmeByIdAsync(int id);
         Task<SmeResponseDto?> CreateSmeAsync(CreateSmeDto createSmeDto);
+        Task<SmeResponseDto> updateSme(int id);
     }
 }

@@ -42,6 +42,13 @@ namespace lmsBackend.Controllers
             if (sme == null) return BadRequest("Invalid Admin ID.");
             return CreatedAtAction(nameof(GetSme), new { id = sme.SmeId }, sme);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSme(int id)
+        {
+            var sme = await _smeService.updateSme(id);
+            if (sme == null) return NotFound();
+            return Ok(sme);
+        }
     }
 
 }

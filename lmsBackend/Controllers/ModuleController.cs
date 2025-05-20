@@ -40,7 +40,10 @@ namespace lmsBackend.Controllers
         public async Task<IActionResult> Add([FromForm] CreateModuleDtos moduleDto)
         {
             await _repository.AddAsync(moduleDto);
-            return Ok("Module added successfully");
+            return Ok(new
+            {
+                message = "Module added successfully"
+            });
         }
 
         [HttpPut("{id}")]

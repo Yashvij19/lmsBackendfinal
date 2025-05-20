@@ -40,9 +40,12 @@ namespace lmsBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] CreateCourseDto courseDto)
         {
-            await _repository.AddAsync(courseDto);
-            var response = new { success = true, message = "Course added successfully" };
-            return Ok(response);
+            var value= await _repository.AddAsync(courseDto);
+            var response = new { success = true,
+                data =value ,
+                message = "Course added successfully"
+                };
+            return Ok(response); 
         }
 
         [HttpPut("{id}")]

@@ -7,7 +7,7 @@ namespace lmsBackend.Repository.CourseRepo
     {
         Task<IEnumerable<ResponseCourseDtos>> GetAllAsync();
         Task<ResponseCourseDtos?> GetByIdAsync(int id);
-        Task AddAsync(CreateCourseDto courseDto);
+        Task<ResponseCourseDtos> AddAsync(CreateCourseDto courseDto);
         Task UpdateAsync(CreateCourseDto courseDto, int id);
     }
 }
