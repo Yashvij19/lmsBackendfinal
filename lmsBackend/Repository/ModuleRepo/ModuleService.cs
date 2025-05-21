@@ -85,17 +85,6 @@ namespace lmsBackend.Repository.ModuleRepo
             await _context.SaveChangesAsync();
         }
 
-        //public async Task DeleteAsync(int id)
-        //{
-        //    var module = await _context.Modules.FindAsync(id);
-        //    if (module == null) return;
-
-        //    DeleteFile(module.videopath);
-        //    DeleteFile(module.documentpath);
-
-        //    _context.Modules.Remove(module);
-        //    await _context.SaveChangesAsync();
-        //}
 
         private string SaveFile(IFormFile file, string folderName)
         {
