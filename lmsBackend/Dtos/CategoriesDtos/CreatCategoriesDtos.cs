@@ -9,5 +9,7 @@ namespace lmsBackend.Dtos.CategoriesDtos
         public IFormFile ImageFile { get; set; }
 
         public string subset { get; set; } = string.Empty;
+
+        public Boolean status { get; set; } = true;
     }
 }
