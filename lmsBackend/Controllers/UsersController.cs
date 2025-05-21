@@ -11,11 +11,11 @@ namespace lmsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class usersController : ControllerBase
     {
         private readonly IUser _userService;
 
-        public UsersController(IUser userService)
+        public usersController(IUser userService)
         {
             _userService = userService;
         }

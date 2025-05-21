@@ -11,11 +11,11 @@ namespace lmsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AdminsController : ControllerBase
+    public class adminsController : ControllerBase
     {
         private readonly IAdmin _adminService;
 
-        public AdminsController(IAdmin adminService)
+        public adminsController(IAdmin adminService)
         {
             _adminService = adminService;
         }

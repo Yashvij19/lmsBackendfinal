@@ -44,7 +44,7 @@ namespace lmsBackend.Repository.CourseRepo
             return _mapper.Map<ResponseCourseDtos>(course);
         }
 
-        public async Task AddAsync(CreateCourseDto courseDto)
+        public async Task<ResponseCourseDtos> AddAsync(CreateCourseDto courseDto)
         {
             var course = new Courses
             {
@@ -71,6 +71,7 @@ namespace lmsBackend.Repository.CourseRepo
 
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
+            return _mapper.Map<ResponseCourseDtos>(course);
         }
 
         public async Task UpdateAsync(CreateCourseDto courseDto, int id)

@@ -11,11 +11,11 @@ namespace lmsBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SmesController : ControllerBase
+    public class smesController : ControllerBase
     {
         private readonly ISme _smeService;
 
-        public SmesController(ISme smeService)
+        public smesController(ISme smeService)
         {
             _smeService = smeService;
         }
@@ -41,6 +41,13 @@ namespace lmsBackend.Controllers
             var sme = await _smeService.CreateSmeAsync(createSmeDto);
             if (sme == null) return BadRequest("Invalid Admin ID.");
             return CreatedAtAction(nameof(GetSme), new { id = sme.SmeId }, sme);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateSme(int id)
+        {
+            var sme = await _smeService.updateSme(id);
+            if (sme == null) return NotFound();
+            return Ok(sme);
         }
     }
 

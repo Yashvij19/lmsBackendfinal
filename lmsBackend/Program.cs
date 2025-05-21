@@ -54,6 +54,17 @@ builder.Services.AddScoped<IModule, ModuleService>();
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+var devCorsPolicy = "devCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(devCorsPolicy, builder =>
+    {
+        //builder.WithOrigins("http://localhost:800").AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+        //builder.SetIsOriginAllowed(origin => true);
+    });
+});
 
 // Add services to the container.
 
@@ -70,6 +81,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("devCorsPolicy");
 
 // Enable CORS before routing
 app.UseCors("AllowAll");

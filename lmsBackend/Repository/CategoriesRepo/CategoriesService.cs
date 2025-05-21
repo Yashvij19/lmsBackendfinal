@@ -110,6 +110,44 @@ namespace lmsBackend.Repository.CategoriesRepo
             await _context.SaveChangesAsync();
         }
 
+        //public async Task UpdateCategories(int id, CreatCategoriesDtos categoryDto)
+        //{
+        //    var existingCategory = await _context.Categories.FindAsync(id);
+
+        //    if (existingCategory == null)
+        //    {
+        //        throw new KeyNotFoundException($"Category with ID {id} not found.");
+        //    }
+
+        //    // Update properties using AutoMapper
+        //    _mapper.Map(categoryDto, existingCategory);
+
+        //    // If ImageFile is provided, update the stored image
+        //    if (categoryDto.ImageFile != null)
+        //    {
+        //        var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploadimage");
+
+        //        if (!Directory.Exists(uploadFolder))
+        //        {
+        //            Directory.CreateDirectory(uploadFolder);
+        //        }
+
+        //        string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(categoryDto.ImageFile.FileName);
+        //        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await categoryDto.ImageFile.CopyToAsync(stream);
+        //        }
+
+        //        existingCategory.imagepath = $"/uploadimage/{uniqueFileName}";
+        //    }
+
+        //    _context.Categories.Update(existingCategory);
+        //    await _context.SaveChangesAsync();
+        //}
+
+
         public async Task UpdateCategories(int id, CreatCategoriesDtos categoryDto)
         {
             var existingCategory = await _context.Categories.FindAsync(id);
@@ -119,13 +157,15 @@ namespace lmsBackend.Repository.CategoriesRepo
                 throw new KeyNotFoundException($"Category with ID {id} not found.");
             }
 
-            // Update properties using AutoMapper
+
+            
             _mapper.Map(categoryDto, existingCategory);
 
-            // If ImageFile is provided, update the stored image
+            
             if (categoryDto.ImageFile != null)
             {
-                var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploadimage");
+              
+                var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploadimage");
 
                 if (!Directory.Exists(uploadFolder))
                 {
@@ -140,7 +180,8 @@ namespace lmsBackend.Repository.CategoriesRepo
                     await categoryDto.ImageFile.CopyToAsync(stream);
                 }
 
-                existingCategory.imagepath = $"/uploadimage/{uniqueFileName}";
+                // FIXED: Save full URL in DB just like in AddCategories method
+                existingCategory.imagepath = $"https://localhost:7264/uploadimage/{uniqueFileName}";
             }
 
             _context.Categories.Update(existingCategory);

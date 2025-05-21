@@ -6,6 +6,7 @@ using lmsBackend.Dtos.LobDtos;
 using lmsBackend.Dtos.ModuleDtos;
 using lmsBackend.Dtos.RoleDtos;
 using lmsBackend.Dtos.SmeDtos;
+using lmsBackend.Dtos.TaDtos;
 using lmsBackend.Dtos.User;
 using lmsBackend.Models;
 
@@ -58,6 +59,10 @@ namespace lmsBackend.AutomapperProfile
     .ForMember(dest => dest.modulename, opt => opt.MapFrom(src => src.modulename))
     .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.description))
     .ForMember(dest => dest.duration, opt => opt.MapFrom(src => src.duration));
+
+            CreateMap<CreateTaDtos, Ta>();
+            CreateMap<Ta, TaResponseDtos>();
+
         }
 
     }

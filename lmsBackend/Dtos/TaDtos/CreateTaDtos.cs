@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace lmsBackend.Dtos.SmeDtos
+namespace lmsBackend.Dtos.TaDtos
 {
-    public class CreateSmeDto
+    public class CreateTaDtos
     {
-        //[Required]
-        //public int AdminId { get; set; }
-
         [Required]
         [StringLength(255)]
         public string Name { get; set; } = string.Empty;
